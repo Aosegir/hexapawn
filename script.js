@@ -14,11 +14,17 @@ function showBoard(board) {
     for(const [rowIndex, row] of [...outerBoard.children].entries()) {
         // transform columns into array to get key-value pairs from entries
         for(const [colIndex, col] of [...row.children].entries()) {
-            if(board[rowIndex][colIndex] === -1 && !col.firstChild) {
+            if(board[rowIndex][colIndex] === -1) {
+                if(col.firstChild) {
+                    col.removeChild(col.firstChild);
+                };
                 let item = document.createElement('img');
                 item.src = 'img/black-pawn.png';
                 col.appendChild(item);
-            } else if (board[rowIndex][colIndex] === 1 && !col.firstChild) {
+            } else if (board[rowIndex][colIndex] === 1) {
+                if(col.firstChild) {
+                    col.removeChild(col.firstChild);
+                };
                 let item = document.createElement('img');
                 item.src = 'img/white-pawn.png';
                 // event listener shows coordinates of pawn
@@ -42,16 +48,23 @@ function showMoves(row, column) {
     if(row && board[row - 1][column] === 0) {
         let newRow = ([...outerBoard.children][row - 1]);
         let newSpace = ([...newRow.children][column]);
-        console.log(newSpace);
         newSpace.style.backgroundColor = "yellow";
         newSpace.addEventListener('click', moveForward);
         console.log("Move forward available");
     };
     // if the spot to the left/right does have a pawn, highlight it for attack
     if(row && board[row - 1][column - 1] === -1) {
+        let newRow = ([...outerBoard.children][row - 1]);
+        let newSpace = ([...newRow.children][column - 1]);
+        newSpace.style.backgroundColor = "yellow";
+        newSpace.addEventListener('click', takePawnLeft);
         console.log("Attack left available");
     }
     if (row && board[row - 1][column + 1] === -1) {
+        let newRow = ([...outerBoard.children][row - 1]);
+        let newSpace = ([...newRow.children][column + 1]);
+        newSpace.style.backgroundColor = "yellow";
+        newSpace.addEventListener('click', takePawnRight);
         console.log("Attack right available");
     }
 };
@@ -67,15 +80,15 @@ function clearMoves() {
     for(const [rowIndex, row] of [...outerBoard.children].entries()) {
         for(const [colIndex, col] of [...row.children].entries()) {
             col.removeEventListener('click', moveForward);
+            col.removeEventListener('click', takePawnLeft);
+            col.removeEventListener('click', takePawnRight);
             col.style.backgroundColor = "transparent";
         };
     };
 };
 
 function moveForward() {
-    console.log("moveForward is called now!");
-    console.log(board);
-    console.log(this);
+    // coordinates of current square found using this and loop
     for(const [rowIndex, row] of [...outerBoard.children].entries()) {
         for(const [colIndex, col] of [...row.children].entries()) {
             if(col === this) {
@@ -86,8 +99,35 @@ function moveForward() {
                 showBoard(board);
             };
         };
-    };
-        
+    }; 
+};
+
+function takePawnLeft() {
+    for(const [rowIndex, row] of [...outerBoard.children].entries()) {
+        for(const [colIndex, col] of [...row.children].entries()) {
+            if(col === this) {
+                board[rowIndex][colIndex] = 1;
+                board[rowIndex + 1][colIndex + 1] = 0;
+                console.log(board);
+                clearMoves();
+                showBoard(board);
+            };
+        };
+    }; 
+};
+
+function takePawnRight() {
+    for(const [rowIndex, row] of [...outerBoard.children].entries()) {
+        for(const [colIndex, col] of [...row.children].entries()) {
+            if(col === this) {
+                board[rowIndex][colIndex] = 1;
+                board[rowIndex + 1][colIndex - 1] = 0;
+                console.log(board);
+                clearMoves();
+                showBoard(board);
+            };
+        };
+    }; 
 };
 
 showBoard(board);
