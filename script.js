@@ -23,17 +23,13 @@ function showBoard(board) {
                 item.src = 'img/white-pawn.png';
                 // event listener shows coordinates of pawn
                 item.addEventListener('click', () => {
+                    // showMoves is called here
                     showMoves(rowIndex, colIndex);
                 });
                 col.appendChild(item);
             } else if (board[rowIndex][colIndex] === 0 && col.firstChild) {
                 col.removeChild(col.firstChild);
             };
-            /*const testEle = document.createElement('h1');
-            testEle.innerHTML = board[rowIndex][colIndex];
-            col.appendChild(testEle);*/
-            /*console.log(board[rowIndex][colIndex]);
-            console.log(col);*/
         };
     };
 };
@@ -48,7 +44,7 @@ function showMoves(row, column) {
         let newSpace = ([...newRow.children][column]);
         console.log(newSpace);
         newSpace.style.backgroundColor = "yellow";
-        newSpace.addEventListener('click', sayHello);
+        newSpace.addEventListener('click', moveForward);
         console.log("Move forward available");
     };
     // if the spot to the left/right does have a pawn, highlight it for attack
@@ -60,29 +56,38 @@ function showMoves(row, column) {
     }
 };
 
-function sayHello() {
+/*function sayHello() {
     console.log("Heyo");
-};
+    this.removeEventListener('click', sayHello);
+    this.style.backgroundColor = 'transparent';
+};*/
 
 function clearMoves() {
+    // hopefully clearing all moveForward anonymous functions
     for(const [rowIndex, row] of [...outerBoard.children].entries()) {
         for(const [colIndex, col] of [...row.children].entries()) {
-            col.removeEventListener('click', sayHello);
+            col.removeEventListener('click', moveForward);
             col.style.backgroundColor = "transparent";
         };
     };
 };
 
-function moveForward(row, column) {
-    console.log(board[row][column]);
-    // if statement checks to see if there is a row above it and if the row is empty
-    // before entering code
-    if(row && board[row - 1][column] === 0) {
-        board[row - 1][column] = 1;
-        board[row][column] = 0;
-        console.log(board);
-        showBoard(board);
+function moveForward() {
+    console.log("moveForward is called now!");
+    console.log(board);
+    console.log(this);
+    for(const [rowIndex, row] of [...outerBoard.children].entries()) {
+        for(const [colIndex, col] of [...row.children].entries()) {
+            if(col === this) {
+                board[rowIndex][colIndex] = 1;
+                board[rowIndex + 1][colIndex] = 0;
+                console.log(board);
+                clearMoves();
+                showBoard(board);
+            };
+        };
     };
+        
 };
 
 showBoard(board);
