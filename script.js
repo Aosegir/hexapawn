@@ -1,3 +1,6 @@
+// IMPORTS
+import { analyzeAIMoves } from "./ai.js";
+
 let board = [
     [-1, -1, -1],
     [0, 0, 0],
@@ -50,7 +53,6 @@ function showMoves(row, column) {
         let newSpace = ([...newRow.children][column]);
         newSpace.style.backgroundColor = "yellow";
         newSpace.addEventListener('click', moveForward);
-        console.log("Move forward available");
     };
     // if the spot to the left/right does have a pawn, highlight it for attack
     if(row && board[row - 1][column - 1] === -1) {
@@ -58,22 +60,14 @@ function showMoves(row, column) {
         let newSpace = ([...newRow.children][column - 1]);
         newSpace.style.backgroundColor = "yellow";
         newSpace.addEventListener('click', takePawnLeft);
-        console.log("Attack left available");
     }
     if (row && board[row - 1][column + 1] === -1) {
         let newRow = ([...outerBoard.children][row - 1]);
         let newSpace = ([...newRow.children][column + 1]);
         newSpace.style.backgroundColor = "yellow";
         newSpace.addEventListener('click', takePawnRight);
-        console.log("Attack right available");
     }
 };
-
-/*function sayHello() {
-    console.log("Heyo");
-    this.removeEventListener('click', sayHello);
-    this.style.backgroundColor = 'transparent';
-};*/
 
 function clearMoves() {
     // hopefully clearing all moveForward anonymous functions
@@ -94,7 +88,6 @@ function moveForward() {
             if(col === this) {
                 board[rowIndex][colIndex] = 1;
                 board[rowIndex + 1][colIndex] = 0;
-                console.log(board);
                 clearMoves();
                 showBoard(board);
             };
@@ -108,7 +101,6 @@ function takePawnLeft() {
             if(col === this) {
                 board[rowIndex][colIndex] = 1;
                 board[rowIndex + 1][colIndex + 1] = 0;
-                console.log(board);
                 clearMoves();
                 showBoard(board);
             };
@@ -122,7 +114,6 @@ function takePawnRight() {
             if(col === this) {
                 board[rowIndex][colIndex] = 1;
                 board[rowIndex + 1][colIndex - 1] = 0;
-                console.log(board);
                 clearMoves();
                 showBoard(board);
             };
@@ -131,3 +122,5 @@ function takePawnRight() {
 };
 
 showBoard(board);
+
+export { board, outerBoard };
