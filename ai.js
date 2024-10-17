@@ -1,9 +1,12 @@
 // IMPORTS
-import { board, outerBoard } from './script.js';
+import { board, outerBoard, showBoard } from './script.js';
 
 const lostMoves = [];
 let possibleMoves = [];
 
+/*
+    STARTING FUNCTION - LOOK FOR POSSIBLE MOVES AMONG ALL PIECES
+*/
 function analyzeAIMoves() {
     possibleMoves = [];
     for(const [rowIndex, row] of [...outerBoard.children].entries()) {
@@ -17,27 +20,58 @@ function analyzeAIMoves() {
     evalMoves(move);
 };
 
-// adds possible moves to the possibleMoves array
+/*
+    POPULATE ARRAY WITH POSSIBLE MOVES
+*/
 function analyzeMove(row, column) {
     if(board[row + 1][column] === 0) possibleMoves.push(`F${row}${column}`);
     if(board[row + 1][column - 1] === 1) possibleMoves.push(`TL${row}${column}`);
     if(board[row + 1][column + 1] === 1) possibleMoves.push(`TR${row}${column}`);
 };
 
+/*
+    SELECT RANDOM MOVE FROM POPULATED ARRAY
+*/
 function selectRandom(arr) {
     const random = arr[Math.floor(Math.random() * arr.length)];
     return random;
 };
 
+/*
+    EXECUTE APPROPRIATE FUNCTION FOR RANDOM MOVE
+*/
 function evalMoves(move) {
     console.log(move);
-    if(move[0] === 'F') AIMove(Number(move[1]), Number(move[2]));
+    if(move[0] === 'F') {
+        AIMove(Number(move[1]), Number(move[2]));
+        showBoard(board);
+    } else if(move[0] === 'T') {
+        if(move[1] === 'L') {
+            AITakeLeft(Number(move[2]), Number(move[3]));
+            showBoard(board);
+        } else if (move[1] === 'R') {
+            AITakeRight(Number(move[2]), Number(move[3]));
+            showBoard(board);
+        };
+    };
 };
 
+/*
+    AI HEXAPAWN MOVE FUNCTIONS
+*/
 function AIMove(row, column) {
     board[row + 1][column] = -1;
     board[row][column] = 0;
-    console.log(board);
+};
+
+function AITakeLeft(row, column) {
+    board[row + 1][column - 1] = -1;
+    board[row][column] = 0;
+};
+
+function AITakeRight(row, column) {
+    board[row + 1][column + 1] = -1;
+    board[row][column] = 0;
 };
 
 export { analyzeAIMoves };

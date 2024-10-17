@@ -7,11 +7,20 @@ let board = [
     [1, 1, 1]
 ];
 let outerBoard = document.getElementById('outer-board');
+let gameOver = false;
+let playButton = document.getElementById('play');
+
+playButton.addEventListener('click', () => {
+    playGame();
+});
 
 function playGame() {
-    // user will make moves until they win or are defeated by the 'ai'
+    showBoard(board);
 };
 
+/*
+    BASE FUNCTION - SHOWING BOARD STATE
+*/
 function showBoard(board) {
     // transform rows into array to get key-value pairs from entries
     for(const [rowIndex, row] of [...outerBoard.children].entries()) {
@@ -43,7 +52,9 @@ function showBoard(board) {
     };
 };
 
-
+/*
+    MOVE EVENT LISTENER FUNCTIONS
+*/
 function showMoves(row, column) {
     // calls clearMoves function to remove colors and event listeners
     clearMoves();
@@ -81,6 +92,9 @@ function clearMoves() {
     };
 };
 
+/*
+    PLAYER MOVING FUNCTIONS
+*/
 function moveForward() {
     // coordinates of current square found using this and loop
     for(const [rowIndex, row] of [...outerBoard.children].entries()) {
@@ -90,6 +104,7 @@ function moveForward() {
                 board[rowIndex + 1][colIndex] = 0;
                 clearMoves();
                 showBoard(board);
+                analyzeAIMoves();
             };
         };
     }; 
@@ -103,6 +118,7 @@ function takePawnLeft() {
                 board[rowIndex + 1][colIndex + 1] = 0;
                 clearMoves();
                 showBoard(board);
+                analyzeAIMoves();
             };
         };
     }; 
@@ -116,11 +132,20 @@ function takePawnRight() {
                 board[rowIndex + 1][colIndex - 1] = 0;
                 clearMoves();
                 showBoard(board);
+                analyzeAIMoves();
             };
         };
     }; 
 };
 
-showBoard(board);
+/*
+    MISC.
+*/
+function checkGameState() {
+    if(board[0].includes(1)) {
+        gameOver = true;
+    };
+    console.log(board[0].includes(1));
+};
 
-export { board, outerBoard };
+export { board, outerBoard, showBoard };
