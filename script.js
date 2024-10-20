@@ -15,7 +15,20 @@ playButton.addEventListener('click', () => {
 });
 
 function playGame() {
+    board = setBoard();
+    gameOver = false;
     showBoard(board);
+};
+
+/*
+    FUNCTION ZERO - SETTING/RESETTING BOARD
+*/
+function setBoard() {
+    return [
+        [-1, -1, -1],
+        [0, 0, 0],
+        [1, 1, 1]
+    ];
 };
 
 /*
@@ -102,9 +115,7 @@ function moveForward() {
             if(col === this) {
                 board[rowIndex][colIndex] = 1;
                 board[rowIndex + 1][colIndex] = 0;
-                clearMoves();
-                showBoard(board);
-                analyzeAIMoves();
+                endTurn();
             };
         };
     }; 
@@ -116,9 +127,7 @@ function takePawnLeft() {
             if(col === this) {
                 board[rowIndex][colIndex] = 1;
                 board[rowIndex + 1][colIndex + 1] = 0;
-                clearMoves();
-                showBoard(board);
-                analyzeAIMoves();
+                endTurn();
             };
         };
     }; 
@@ -130,9 +139,7 @@ function takePawnRight() {
             if(col === this) {
                 board[rowIndex][colIndex] = 1;
                 board[rowIndex + 1][colIndex - 1] = 0;
-                clearMoves();
-                showBoard(board);
-                analyzeAIMoves();
+                endTurn();
             };
         };
     }; 
@@ -141,11 +148,17 @@ function takePawnRight() {
 /*
     MISC.
 */
+function endTurn() {
+    clearMoves();
+    showBoard(board);
+    checkGameState();
+    if(!gameOver) analyzeAIMoves();
+};
+
 function checkGameState() {
     if(board[0].includes(1)) {
         gameOver = true;
     };
-    console.log(board[0].includes(1));
 };
 
-export { board, outerBoard, showBoard };
+export { board, outerBoard, showBoard, gameOver };

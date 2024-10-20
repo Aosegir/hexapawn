@@ -1,8 +1,9 @@
 // IMPORTS
-import { board, outerBoard, showBoard } from './script.js';
+import { board, outerBoard, showBoard, gameOver } from './script.js';
 
 const lostMoves = [];
 let possibleMoves = [];
+let lastMove = '';
 
 /*
     STARTING FUNCTION - LOOK FOR POSSIBLE MOVES AMONG ALL PIECES
@@ -17,7 +18,7 @@ function analyzeAIMoves() {
     };
     console.log(possibleMoves);
     let move = selectRandom(possibleMoves);
-    evalMoves(move);
+    if(move) evalMoves(move);
 };
 
 /*
@@ -33,8 +34,14 @@ function analyzeMove(row, column) {
     SELECT RANDOM MOVE FROM POPULATED ARRAY
 */
 function selectRandom(arr) {
-    const random = arr[Math.floor(Math.random() * arr.length)];
-    return random;
+    if(arr.length) {
+        let random = arr[Math.floor(Math.random() * arr.length)];
+        lastMove = random;
+        return random;
+    } else {
+        console.log("You did it! The AI has no legal moves. You win!");
+        //gameOver = true;
+    };
 };
 
 /*
