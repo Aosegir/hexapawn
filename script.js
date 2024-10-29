@@ -9,6 +9,8 @@ let board = [
 let outerBoard = document.getElementById('outer-board');
 let gameOver = false;
 let playButton = document.getElementById('play');
+let playerWins = document.getElementById('player-wins');
+let computerWins = document.getElementById('computer-wins');
 
 playButton.addEventListener('click', () => {
     playGame();
@@ -157,8 +159,20 @@ function endTurn() {
 
 function checkGameState() {
     if(board[0].includes(1)) {
-        gameOver = true;
+        playerWin();
+    } else if (board[2].includes(-1)) {
+        computerWin();
     };
 };
 
-export { board, outerBoard, showBoard, gameOver };
+function playerWin() {
+    gameOver = true;
+    playerWins.innerHTML = Number(playerWins.innerHTML) + 1;
+};
+
+function computerWin() {
+    gameOver = true;
+    computerWins.innerHTML = Number(computerWins.innerHTML) + 1;
+};
+
+export { board, outerBoard, showBoard, playerWin };

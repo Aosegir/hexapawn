@@ -1,5 +1,5 @@
 // IMPORTS
-import { board, outerBoard, showBoard, gameOver } from './script.js';
+import { board, outerBoard, showBoard, playerWin } from './script.js';
 
 const lostMoves = [];
 let possibleMoves = [];
@@ -25,9 +25,27 @@ function analyzeAIMoves() {
     POPULATE ARRAY WITH POSSIBLE MOVES
 */
 function analyzeMove(row, column) {
-    if(board[row + 1][column] === 0) possibleMoves.push(`F${row}${column}`);
-    if(board[row + 1][column - 1] === 1) possibleMoves.push(`TL${row}${column}`);
-    if(board[row + 1][column + 1] === 1) possibleMoves.push(`TR${row}${column}`);
+    if(board[row + 1][column] === 0)  {
+        let possMove = `F${row}${column}`;
+        if(!lostMoves.includes(possMove)) {
+            lastMove = possMove;
+            possibleMoves.push(possMove);
+        };
+    };
+    if(board[row + 1][column - 1] === 1) {
+        let possMove = `F${row}${column}`;
+        if(!lostMoves.includes(possMove)) {
+            lastMove = possMove;
+            possibleMoves.push(possMove);
+        };
+    };
+    if(board[row + 1][column + 1] === 1) {
+        let possMove = `F${row}${column}`;
+        if(!lostMoves.includes(possMove)) {
+            lastMove = possMove;
+            possibleMoves.push(possMove);
+        };
+    };
 };
 
 /*
@@ -40,7 +58,9 @@ function selectRandom(arr) {
         return random;
     } else {
         console.log("You did it! The AI has no legal moves. You win!");
-        //gameOver = true;
+        lostMoves.push(lastMove);
+        console.log(lostMoves);
+        playerWin();
     };
 };
 
